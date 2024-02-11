@@ -5,9 +5,8 @@ import pygame
 import requests
 
 coord = input('Введите координаты: ')
-spn = input('Введите масштаб: ')
-
-map_request = f"http://static-maps.yandex.ru/1.x/?ll={''.join(coord)}&spn={spn}&l=map"
+spn = int(input('Введите масштаб: '))
+map_request = f"http://static-maps.yandex.ru/1.x/?ll={coord}&z={spn}&l=map"
 response = requests.get(map_request)
 
 if not response:
@@ -28,9 +27,50 @@ screen = pygame.display.set_mode((600, 450))
 screen.blit(pygame.image.load(map_file), (0, 0))
 # Переключаем экран и ждем закрытия окна.
 pygame.display.flip()
-while pygame.event.wait().type != pygame.QUIT:
-    pass
-pygame.quit()
+work = True
+while work:  # цикл работы карты
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:  # выход с проги
+            pygame.quit()
+            work = False
+        if event.type == pygame.KEYDOWN:  # отслеживание клавиш pg_up и pg_down
+            if event.key == pygame.K_PAGEUP:  # увеличение
+                if int(spn) + 1 < 20:  # границы увеличения
+                    spn = int(spn) + 1
+                print(coord, spn)
+                map_request = f"http://static-maps.yandex.ru/1.x/?ll={''.join(coord)}&z={spn}&l=map"
+                response = requests.get(map_request)  # создание нового запроса
+                if not response:  # проверка на ошибки
+                    pygame.quit()
+                    work = False
+                    print("Ошибка выполнения запроса:")
+                    print(map_request)
+                    print("Http статус:", response.status_code, "(", response.reason, ")")
+                    sys.exit(1)
+                map_file = "map.png"
+                with open(map_file, "wb") as file:
+                    file.write(response.content)
+                screen.blit(pygame.image.load(map_file), (0, 0))  # вывод нового фрагмента карты на экран
+                pygame.display.flip()
+
+            if event.key == pygame.K_PAGEDOWN:  # уменьшение
+                if int(spn) - 1 > 0:  # границы уменьшения
+                    spn = int(spn) - 1
+                map_request = f"http://static-maps.yandex.ru/1.x/?ll={''.join(coord)}&z={spn}&l=map"
+                response = requests.get(map_request)  # создание нового запроса
+                if not response:  # проверка на ошибки
+                    pygame.quit()
+                    work = False
+                    print("Ошибка выполнения запроса:")
+                    print(map_request)
+                    print("Http статус:", response.status_code, "(", response.reason, ")")
+                    sys.exit(1)
+                map_file = "map.png"
+                with open(map_file, "wb") as file:
+                    file.write(response.content)
+                screen.blit(pygame.image.load(map_file), (0, 0))  # вывод нового фрагмента карты на экран
+                pygame.display.flip()
+
 
 # Удаляем за собой файл с изображением.
 os.remove(map_file)
