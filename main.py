@@ -15,7 +15,7 @@ if not response:
     print("Http статус:", response.status_code, "(", response.reason, ")")
     sys.exit(1)
 
-# Запишем полученное изображение в файл.
+# Запишем полученное изображение в файл
 map_file = "map.png"
 with open(map_file, "wb") as file:
     file.write(response.content)
