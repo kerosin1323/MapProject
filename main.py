@@ -52,6 +52,7 @@ while work:  # цикл работы карты
                     file.write(response.content)
                 screen.blit(pygame.image.load(map_file), (0, 0))  # вывод нового фрагмента карты на экран
                 pygame.display.flip()
+                os.remove(map_file)  # удаление фото после вывода, для экономии памяти
 
             if event.key == pygame.K_PAGEDOWN:  # уменьшение
                 if int(spn) - 1 > 0:  # границы уменьшения
@@ -70,6 +71,7 @@ while work:  # цикл работы карты
                     file.write(response.content)
                 screen.blit(pygame.image.load(map_file), (0, 0))  # вывод нового фрагмента карты на экран
                 pygame.display.flip()
+                os.remove(map_file)  # удаление фото после вывода, для экономии памяти
 
 
 # Удаляем за собой файл с изображением.
