@@ -5,9 +5,8 @@ import pygame
 import requests
 
 coord = input('Введите координаты: ')
-spn = input('Введите масштаб: ')
-
-map_request = f"http://static-maps.yandex.ru/1.x/?ll={''.join(coord)}&z={spn}&l=map"
+spn = int(input('Введите масштаб: '))
+map_request = f"http://static-maps.yandex.ru/1.x/?ll={coord}&z={spn}&l=map"
 response = requests.get(map_request)
 
 if not response:
@@ -16,7 +15,7 @@ if not response:
     print("Http статус:", response.status_code, "(", response.reason, ")")
     sys.exit(1)
 
-# Запишем полученное изображение в файл.
+# Запишем полученное изображение в файл
 map_file = "map.png"
 with open(map_file, "wb") as file:
     file.write(response.content)
@@ -38,6 +37,7 @@ while work:  # цикл работы карты
             if event.key == pygame.K_PAGEUP:  # увеличение
                 if int(spn) + 1 < 20:  # границы увеличения
                     spn = int(spn) + 1
+                print(coord, spn)
                 map_request = f"http://static-maps.yandex.ru/1.x/?ll={''.join(coord)}&z={spn}&l=map"
                 response = requests.get(map_request)  # создание нового запроса
                 if not response:  # проверка на ошибки
@@ -72,7 +72,6 @@ while work:  # цикл работы карты
                 screen.blit(pygame.image.load(map_file), (0, 0))  # вывод нового фрагмента карты на экран
                 pygame.display.flip()
                 os.remove(map_file)  # удаление фото после вывода, для экономии памяти
-
 
 
 # Удаляем за собой файл с изображением.
