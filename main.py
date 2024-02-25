@@ -32,7 +32,6 @@ map_file = "map.png"
 with open(map_file, "wb") as file:
     file.write(response.content)
 
-# Инициализируем pygame
 pygame.init()
 screen = pygame.display.set_mode((600, 450))
 # Рисуем картинку, загружаемую из только что созданного файла.
