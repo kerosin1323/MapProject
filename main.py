@@ -32,6 +32,7 @@ map_file = "map.png"
 with open(map_file, "wb") as file:
     file.write(response.content)
 
+# Инициализируем pygame
 pygame.init()
 screen = pygame.display.set_mode((600, 450))
 # Рисуем картинку, загружаемую из только что созданного файла.
@@ -74,20 +75,6 @@ while work:  # цикл работы карты
                         zoom = 0.001
                         print(zoom)
                     map_request = f"http://static-maps.yandex.ru/1.x/?ll={''.join(coord)}&z={spn}&l=map"
-                    response = requests.get(map_request)  # создание нового запроса
-                    if not response:  # проверка на ошибки
-                        pygame.quit()
-                        work = False
-                        print("Ошибка выполнения запроса:")
-                        print(map_request)
-                        print("Http статус:", response.status_code, "(", response.reason, ")")
-                        sys.exit(1)
-                    map_file = "map.png"
-                    with open(map_file, "wb") as file:
-                        file.write(response.content)
-                    screen.blit(pygame.image.load(map_file), (0, 0))  # вывод нового фрагмента карты на экран
-                    pygame.display.flip()
-                    os.remove(map_file)  # удаление фото после вывода, для экономии памяти
 
             if event.key == pygame.K_PAGEDOWN:  # уменьшение
                 if int(spn) - 1 > 0:  # границы уменьшения
@@ -118,102 +105,54 @@ while work:  # цикл работы карты
                         zoom = 0.001
                         print(zoom)
                     map_request = f"http://static-maps.yandex.ru/1.x/?ll={''.join(coord)}&z={spn}&l=map"
-                    response = requests.get(map_request)  # создание нового запроса
-                    if not response:  # проверка на ошибки
-                        pygame.quit()
-                        work = False
-                        print("Ошибка выполнения запроса:")
-                        print(map_request)
-                        print("Http статус:", response.status_code, "(", response.reason, ")")
-                        sys.exit(1)
-                    map_file = "map.png"
-                    with open(map_file, "wb") as file:
-                        file.write(response.content)
-                    screen.blit(pygame.image.load(map_file), (0, 0))  # вывод нового фрагмента карты на экран
-                    pygame.display.flip()
-                    os.remove(map_file)  # удаление фото после вывода, для экономии памяти
 
             if event.key == pygame.K_DOWN:  # движение вниз
                 if coord_list[0] - zoom > -90:  # границы движения
                     coord_list[0] -= zoom
                     coord = str(coord_list[1]) + "," + str(coord_list[0])
                 map_request = f"http://static-maps.yandex.ru/1.x/?ll={''.join(coord)}&z={spn}&l=map"
-                response = requests.get(map_request)  # создание нового запроса
-                if not response:  # проверка на ошибки
-                    pygame.quit()
-                    work = False
-                    print("Ошибка выполнения запроса:")
-                    print(map_request)
-                    print("Http статус:", response.status_code, "(", response.reason, ")")
-                    sys.exit(1)
-                map_file = "map.png"
-                with open(map_file, "wb") as file:
-                    file.write(response.content)
-                screen.blit(pygame.image.load(map_file), (0, 0))  # вывод нового фрагмента карты на экран
-                pygame.display.flip()
-                os.remove(map_file)  # удаление фото после вывода, для экономии памяти
 
             if event.key == pygame.K_UP:  # движение вверх
                 if coord_list[0] + zoom < 90:  # границы движения
                     coord_list[0] += zoom
                     coord = str(coord_list[1]) + "," + str(coord_list[0])
                 map_request = f"http://static-maps.yandex.ru/1.x/?ll={''.join(coord)}&z={spn}&l=map"
-                response = requests.get(map_request)  # создание нового запроса
-                if not response:  # проверка на ошибки
-                    pygame.quit()
-                    work = False
-                    print("Ошибка выполнения запроса:")
-                    print(map_request)
-                    print("Http статус:", response.status_code, "(", response.reason, ")")
-                    sys.exit(1)
-                map_file = "map.png"
-                with open(map_file, "wb") as file:
-                    file.write(response.content)
-                screen.blit(pygame.image.load(map_file), (0, 0))  # вывод нового фрагмента карты на экран
-                pygame.display.flip()
-                os.remove(map_file)  # удаление фото после вывода, для экономии памяти
 
             if event.key == pygame.K_RIGHT:  # движение вправо
                 if coord_list[1] + zoom < 180:  # границы движения
                     coord_list[1] += zoom
                     coord = str(coord_list[1]) + "," + str(coord_list[0])
                 map_request = f"http://static-maps.yandex.ru/1.x/?ll={''.join(coord)}&z={spn}&l=map"
-                response = requests.get(map_request)  # создание нового запроса
-                if not response:  # проверка на ошибки
-                    pygame.quit()
-                    work = False
-                    print("Ошибка выполнения запроса:")
-                    print(map_request)
-                    print("Http статус:", response.status_code, "(", response.reason, ")")
-                    sys.exit(1)
-                map_file = "map.png"
-                with open(map_file, "wb") as file:
-                    file.write(response.content)
-                screen.blit(pygame.image.load(map_file), (0, 0))  # вывод нового фрагмента карты на экран
-                pygame.display.flip()
-                os.remove(map_file)  # удаление фото после вывода, для экономии памяти
 
             if event.key == pygame.K_LEFT:  # движение влево
                 if coord_list[1] - zoom > -180:  # границы движения
                     coord_list[1] -= zoom
                     coord = str(coord_list[1]) + "," + str(coord_list[0])
                 map_request = f"http://static-maps.yandex.ru/1.x/?ll={''.join(coord)}&z={spn}&l=map"
-                response = requests.get(map_request)  # создание нового запроса
-                if not response:  # проверка на ошибки
-                    pygame.quit()
-                    work = False
-                    print("Ошибка выполнения запроса:")
-                    print(map_request)
-                    print("Http статус:", response.status_code, "(", response.reason, ")")
-                    sys.exit(1)
-                map_file = "map.png"
-                with open(map_file, "wb") as file:
-                    file.write(response.content)
-                screen.blit(pygame.image.load(map_file), (0, 0))  # вывод нового фрагмента карты на экран
-                pygame.display.flip()
-                os.remove(map_file)  # удаление фото после вывода, для экономии памяти
 
+            if event.key == pygame.K_1:
+                map_request = f"http://static-maps.yandex.ru/1.x/?ll={''.join(coord)}&z={spn}&l=sat"
 
+            if event.key == pygame.K_2:
+                map_request = f"http://static-maps.yandex.ru/1.x/?ll={''.join(coord)}&z={spn}&l=sat,skl"
+
+            if event.key == pygame.K_3:
+                map_request = f"http://static-maps.yandex.ru/1.x/?ll={''.join(coord)}&z={spn}&l=map"
+
+        response = requests.get(map_request)  # создание нового запроса
+        if not response:  # проверка на ошибки
+            pygame.quit()
+            work = False
+            print("Ошибка выполнения запроса:")
+            print(map_request)
+            print("Http статус:", response.status_code, "(", response.reason, ")")
+            sys.exit(1)
+        map_file = "map.png"
+        with open(map_file, "wb") as file:
+            file.write(response.content)
+        screen.blit(pygame.image.load(map_file), (0, 0))  # вывод нового фрагмента карты на экран
+        pygame.display.flip()
+        os.remove(map_file)  # удаление фото после вывода, для экономии памяти
 
 # Удаляем за собой файл с изображением.
 os.remove(map_file)
