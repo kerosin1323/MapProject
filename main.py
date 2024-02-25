@@ -6,6 +6,7 @@ spn_to_px_convert = {1: 0, 2: 0, 3: 0.5, 4: 0.5, 5: 0.1, 6: 0.1, 7: 0.08, 8: 0.0
 spn = 10
 zoom = 0.007
 l = 'map'
+
 # Инициализируем pygame
 pygame.init()
 screen = pygame.display.set_mode((600, 450))
@@ -55,7 +56,8 @@ geocoder_response = requests.get(geocoder_request).json()["response"]["GeoObject
     "GeoObject"]
 coord = geocoder_response["Point"]["pos"].split()
 coord_list = list(map(float, geocoder_response["Point"]["pos"].split()))
-map_request = f"http://static-maps.yandex.ru/1.x/?ll={','.join(coord)}&z={spn}&l=map"
+pt = f"{','.join(coord)},round"
+map_request = f"http://static-maps.yandex.ru/1.x/?ll={','.join(coord)}&z={spn}&l={l}&pt={pt}"
 map_file = get_response(map_request)[0]
 
 while work:
@@ -149,8 +151,7 @@ while work:
                 l = 'map'
 
         coord = [str(coord_list[0]), str(coord_list[1])]
-        print(coord)
-        map_request = f"http://static-maps.yandex.ru/1.x/?ll={','.join(coord)}&z={spn}&l={l}"
+        map_request = f"http://static-maps.yandex.ru/1.x/?ll={','.join(coord)}&z={spn}&l={l}&pt={pt}"
         map_file, work = get_response(map_request)
         screen.blit(pygame.image.load(map_file), (0, 0))  # вывод нового фрагмента карты на экран
         pygame.display.flip()
